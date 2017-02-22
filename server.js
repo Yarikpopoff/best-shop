@@ -15,6 +15,8 @@ app.options('*', cors({
     credentials: true
 }));
 
+app.use('/api',  require('./server/routes'));
+
 const server = http.createServer(app);
 server.listen(config.get('port'),function() {
     // console.log(`[server][listen] port: ${config.get('port')}`);
