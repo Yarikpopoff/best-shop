@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-const config = require('./server/config');
+const config = require('./server/conf');
 
 const app = express();
 
@@ -19,8 +19,8 @@ app.use('/api',  require('./server/routes'));
 
 const server = http.createServer(app);
 server.listen(config.get('port'),function() {
-    // console.log(`[server][listen] port: ${config.get('port')}`);
-    // console.log(`[server][listen] dev-webpack-server: ${config.get('dev-webpack-server')}`);
+    // console.log(`[server][listen] port: ${conf.get('port')}`);
+    // console.log(`[server][listen] dev-webpack-server: ${conf.get('dev-webpack-server')}`);
     console.log('Server listening on port ' + server.address().port);
 });
 

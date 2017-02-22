@@ -1,8 +1,8 @@
-const conf = require('./configuration');
+const config = require('./middleware');
 
 function get(key){
     try {
-        return conf.get(key);
+        return config.get(key);
     }
     catch (e){
         console.error(`[server/configuration/config.js][get] Can't find key '${key}'`);
@@ -13,4 +13,3 @@ function get(key){
 module.exports = {
     get
 };
-
