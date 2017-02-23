@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const config = require('./server/conf');
+const migration = require('./server/db/migration');
+
+migration.db_upgrade(config.get("db-env"));
 
 const app = express();
 
