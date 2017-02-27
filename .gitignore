@@ -1,4 +1,7 @@
 node_modules/
 .idea/
 npm-debug.log
+server/conf/config.*.json
+server/db/*.db
+server/db/sqlite3.exe
 public/build/bundle.js
