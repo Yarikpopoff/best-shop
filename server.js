@@ -17,7 +17,7 @@ app.options('*', cors({
     origin: config.get('dev-webpack-server'),
     credentials: true
 }));
-
+app.use('/', express.static('public'));
 app.use('/api',  require('./server/routes'));
 
 const server = http.createServer(app);
