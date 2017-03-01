@@ -2,8 +2,8 @@
 
 const express = require('express');
 let router = express.Router();
-const handler = require('./version/handler');
 
-router.use('/version', handler.versionHandler);
+router.use('/version', require('./version/router'));
+router.use('/products', require('./products/router'));
 
 module.exports = router;
