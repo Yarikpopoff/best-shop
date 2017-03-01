@@ -1,11 +1,11 @@
 {
   "dev": {
     "driver": "sqlite3",
-    "filename": "server/db/dev.db"
+    "filename": "server/db/dev.sqlite"
   },
   "prod": {
     "driver": "sqlite3",
-    "filename": "server/db/prod.db"
+    "filename": "server/db/prod.sqlite"
   },
   "memory": {
     "driver": "sqlite3",
