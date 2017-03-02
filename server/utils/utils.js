@@ -23,7 +23,18 @@ function getDB() {
     return new Sqlite(dbPath(), {Promise});
 }
 
+function getKnex(){
+    const knex = require('knex')({
+        client: 'sqlite3',
+        connection: {
+            filename: dbPath()
+        }
+    });
+    return knex;
+}
+
 module.exports = {
     dbPath,
+    getKnex,
     getDB
 };

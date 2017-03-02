@@ -1,22 +1,31 @@
 const db = require('../../utils/utils').getDB();
+const knex = require('../../utils/utils').getKnex();
 
 function getProducts() {
-    return db.all('SELECT * FROM product')
+    const builder = knex.select().from('product');
+    const {sql, bindings} = builder.toSQL();
+    console.log(`[products][getProducts][sql] ${sql} [${bindings}]`);
+    return db.all(sql)
         .then(products => {
             return products;
         });
 }
 
 function getProductsById(id) {
-    return db.all('SELECT * FROM product WHERE id = ?', id)
+    const builder = knex.select().from('product').where('id', id);
+    const {sql, bindings} = builder.toSQL();
+    console.log(`[products][getProductsById][sql] ${sql} [${bindings}]`);
+    return db.all(sql, bindings)
         .then(([product]) => {
             return product || null;
         });
 }
 
 function createProducts(body) {
-    return db.run('insert into product (name, price, img_name, description) VALUES (?,?,?,?)',
-        [body.name, body.price, body.img_name, body.description])
+    const builder = knex('product').insert(body);
+    const {sql, bindings} = builder.toSQL();
+    console.log(`[products][createProducts][sql] ${sql} [${bindings}]`);
+    return db.run(sql, bindings)
         .then((values) => {
             const id = values.stmt.lastID;
             return getProductsById(id);
@@ -24,19 +33,20 @@ function createProducts(body) {
 }
 
 function editProduct(id, body) {
-    const s = Object.keys(body).map((x) => {
-        return x + "='" + body[x] + "'";
-    }).join(',');
-    const sql = 'update product set ' + s + ' where id=?';
-    console.log(`[][][sql] ${sql}`);
-    return db.run(sql, [id])
+    const builder = knex('product').update(body).where('id', id);
+    const {sql, bindings} = builder.toSQL();
+    console.log(`[products][getProductsById][sql] ${sql} [${bindings}]`);
+    return db.run(sql, bindings)
         .then(() => {
             return getProductsById(id);
         });
 }
 
 function deleteProduct(id) {
-    return db.run('delete from product where id=?', [id]);
+    const builder = knex('product').delete().where('id', id);
+    const {sql, bindings} = builder.toSQL();
+    console.log(`[products][deleteProduct][sql] ${sql} [${bindings}]`);
+    return db.run(sql, bindings);
 }
 
 module.exports = {
