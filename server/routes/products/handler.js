@@ -1,7 +1,7 @@
 const api = require('./index');
 
 function createProduct(req, res, next) {
-    api.createProducts(req.body)
+    api.createProducts(req.data)
         .then(rows => {
             res.json({data: rows});
         })
@@ -24,7 +24,7 @@ function getSingleProduct(req, res, next) {
         .catch(next);
 }
 function editProduct(req, res, next) {
-    api.editProduct(req.params.id, req.body)
+    api.editProduct(req.params.id, req.data)
         .then(rows => {
             res.json({data: rows});
         })
