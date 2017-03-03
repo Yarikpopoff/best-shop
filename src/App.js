@@ -14,7 +14,10 @@ export default class App extends React.Component {
                         <Link to='/main'>Main</Link>
                     </div>
                     <div>
-                        <Link to='/productslist'>Products list</Link>
+                        <Link to='/products'>Products list</Link>
+                    </div>
+                    <div>
+                        <Link to='/admin'>Admin</Link>
                     </div>
                     <div>
                         <Link to='/cart'>Cart</Link>
