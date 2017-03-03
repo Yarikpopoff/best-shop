@@ -1,0 +1,1 @@
+CREATE TABLE product(id INTEGER, name TEXT, price NUMBER, img_name TEXT, description TEXT, PRIMARY KEY(id ASC));
