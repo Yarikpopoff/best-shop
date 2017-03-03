@@ -12,19 +12,24 @@
   "author": "yarikpopoff",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.16.1",
     "bootstrap": "^3.3.7",
     "cors": "^2.8.1",
     "db-migrate-sqlite3": "^0.2.1",
     "express": "^4.14.1",
     "fs": "0.0.1-security",
     "http": "0.0.0",
+    "joi": "^10.2.2",
     "jquery": "*",
+    "knex": "^0.12.7",
     "nconf": "^0.8.4",
     "path": "^0.12.7",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",
-    "react-router": "^3.0.2"
+    "react-router": "^3.0.2",
+    "sqlite-pool": "^1.2.1"
   },
   "devDependencies": {
     "babel": "^6.5.2",
