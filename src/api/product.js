@@ -1,9 +1,13 @@
 const axios = require('axios');
 const host = "http://127.0.0.1:8084";
+const blueBird = require('blueBird');
 
 export function getProduct() {
+    // return blueBird.Promise.resolve([{id:3}]);
     return axios.get(host+"/api/products/")
-        .then(({data})=> data )
+        .then(({data})=> {
+            return data.data;
+        })
 }
 
 export function createProduct(product) {
