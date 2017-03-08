@@ -1,11 +1,12 @@
 const config = require('./middleware');
+const {log, error} = require('debugger')("server");
 
 function get(key){
     try {
         return config.get(key);
     }
     catch (e){
-        console.error(`[server/configuration/config.js][get] Can't find key '${key}'`);
+        error(`[server/configuration/config.js][get] Can't find key '${key}'`);
         return null;
     }
 }

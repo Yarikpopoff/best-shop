@@ -6,3 +6,4 @@ server/conf/config.*
 server/db/*.sqlite*
 server/db/sqlite3.exe
 public/build/bundle.js
+!server/node_modules/

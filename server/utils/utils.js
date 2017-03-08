@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const Sqlite = require('sqlite-pool');
 const config = require('../conf');
 const path = require('path');
+const {log, error} = require('debugger')("utils");
 
 function dbPath() {
     let result;
@@ -15,7 +16,7 @@ function dbPath() {
         default:
             result = "";
     }
-    console.log(`[utils][getDbPath][spath] ${result}`);
+    log(`[getDbPath][spath] ${result}`);
     return result;
 }
 

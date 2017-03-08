@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const bodyParser = require('body-parser');
+const {log, error} = require('./server/node_modules/debugger')('server');
 
 const config = require('./server/conf');
 const migration = require('./server/db/migration');
@@ -29,7 +30,7 @@ const server = http.createServer(app);
 server.listen(config.get('port'),function() {
     // console.log(`[server][listen] port: ${conf.get('port')}`);
     // console.log(`[server][listen] dev-webpack-server: ${conf.get('dev-webpack-server')}`);
-    console.log('Server listening on port ' + server.address().port);
+    log('Server listening on port ' + server.address().port);
 });
 
 module.exports = server;
