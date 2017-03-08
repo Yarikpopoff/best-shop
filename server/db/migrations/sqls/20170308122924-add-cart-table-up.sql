@@ -1,0 +1,1 @@
+CREATE TABLE cart (id INTEGER, PRIMARY KEY(id ASC));
