@@ -1,5 +1,5 @@
-const db = require('../../utils/utils').getDB();
-const knex = require('../../utils/utils').getKnex();
+const db = require('utils').getDB();
+const knex = require('utils').getKnex();
 const {log, error} = require('debugger')("products");
 
 function getProducts() {
