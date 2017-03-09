@@ -17,12 +17,12 @@ function getCarts() {
     log(`[product][sql] ${sqlProduct} [${bindingsProduct}]`);
 
     return Promise.join(
-            db.all(sqlCart, bindingsCart),
-            db.all(sqlCartProduct, bindingsCartProduct),
-            db.all(sqlProduct, bindingsProduct)
-        )
-        .then(([ carts, cartProducts, products])=>{
-            const resultCarts = carts.map(cart=>{
+        db.all(sqlCart, bindingsCart),
+        db.all(sqlCartProduct, bindingsCartProduct),
+        db.all(sqlProduct, bindingsProduct)
+    )
+        .then(([ carts, cartProducts, products]) => {
+            const resultCarts = carts.map(cart => {
                 const productIds = cartProducts.filter(y => y.cart_id == cart.id).map(z => z.product_id);
                 cart.product_list = products.filter(x => productIds.some(y => y == x.id));
                 return cart;
@@ -33,34 +33,22 @@ function getCarts() {
 }
 
 function getCartById(id) {
-    return getCarts()
-        .then(carts => {
-            return carts.find(cart => cart.id == id)
-        });
-    /*
     let builder = knex.select().from('cart').where('id', id);
     let {sql, bindings} = builder.toSQL();
     log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
-    return db.all(sql, bindings)
-        .then(([cart]) => {
-            if (!cart){
+    return Promise.join(
+        db.all(sql, bindings),
+        findProductByCartId(id)
+    )
+        .then(([carts, products]) => {
+            if (carts && carts.length) {
+                const cart = carts[0];
+                cart.product_list = products;
+                return cart;
+            } else {
                 return null;
             }
-            let builder = knex.select().from('cart_product').where('cart_id', cart.id); //.whereIn('id', [1, 2, 3]);
-            let {sql, bindings} = builder.toSQL();
-            log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
-            return db.all(sql, bindings)
-                .then((products_ids)=>{
-                    let builder = knex.select().from('product').whereIn('id', products_ids.map(x=>x.product_id));
-                    let {sql, bindings} = builder.toSQL();
-                    log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
-                    return db.all(sql, bindings)
-                        .then((rows)=>{
-                            cart.product_list = rows;
-                            return cart;
-                        });
-                })
-        });*/
+        });
 }
 
 function createCart(body) {
@@ -72,19 +60,21 @@ function createCart(body) {
     return db.run(sql, bindings)
         .then((values) => {
             const id = values.stmt.lastID;
-            const cart_products = items.map(x=>{ return {cart_id: id, product_id: x}});
+            const cart_products = items.map(x => {
+                return {cart_id: id, product_id: x}
+            });
             let builder = knex('cart_product').insert(cart_products);
             let {sql, bindings} = builder.toSQL();
             return db.run(sql, bindings)
-                .then(()=>{
-                    return getCartById(id);
-                });
         })
-
+        .then(() => {
+            return getCartById(id);
+        });
 }
 
+// todo
 function editCart(id, body) {
-    return;
+    return Promise.resolve(`todo`);
     const builder = knex('cart').update(body).where('id', id);
     const {sql, bindings} = builder.toSQL();
     log(`[editCart][sql] ${sql} [${bindings}]`);
@@ -95,11 +85,32 @@ function editCart(id, body) {
 }
 
 function deleteCart(id) {
-    return;
-    const builder = knex('cart').delete().where('id', id);
-    const {sql, bindings} = builder.toSQL();
-    log(`[deleteProduct][sql] ${sql} [${bindings}]`);
-    return db.run(sql, bindings);
+    log(`[deleteProduct][sql] ${id}`);
+    const builderCart = knex('cart').delete().where('id', id);
+    const {sql: sqlCart, bindings: bindingsCart} = builderCart.toSQL();
+    log(`[deleteProduct][sql] ${sqlCart} [${bindingsCart}]`);
+
+    const builderCartProduct = knex('cart_product').delete().where('cart_id', id);
+    const {sql: sqlCartProduct, bindings: bindingsCartProduct} = builderCartProduct.toSQL();
+    log(`[deleteProduct][sql] ${sqlCartProduct} [${bindingsCartProduct}]`);
+
+    return Promise.join(
+        db.run(sqlCart, bindingsCart),
+        db.run(sqlCartProduct, bindingsCartProduct)
+    )
+}
+
+function findProductByCartId(id) {
+    let builder = knex.select().from('cart_product').where('cart_id', id); //.whereIn('id', [1, 2, 3]);
+    let {sql, bindings} = builder.toSQL();
+    log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
+    return db.all(sql, bindings)
+        .then((products_ids) => {
+            let builder = knex.select().from('product').whereIn('id', products_ids.map(x => x.product_id));
+            let {sql, bindings} = builder.toSQL();
+            log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
+            return db.all(sql, bindings);
+        })
 }
 
 module.exports = {
