@@ -4,7 +4,7 @@
   "description": "This is my training project",
   "main": "index.js",
   "scripts": {
-    "server": "node server.js",
+    "server": "set DEBUG=*,-express:* && node server.js",
     "server-prod": "set NODE_ENV=prod& node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "devserver": "webpack-dev-server --debug --hot --devtool eval-source-map --output-pathinfo --watch --colors --inline --content-base public --port 8090 --host 0.0.0.0"
@@ -17,6 +17,7 @@
     "bootstrap": "^3.3.7",
     "cors": "^2.8.1",
     "db-migrate-sqlite3": "^0.2.1",
+    "debug": "^2.6.1",
     "express": "^4.14.1",
     "fs": "0.0.1-security",
     "http": "0.0.0",

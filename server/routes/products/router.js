@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const handler = require('./handler');
 
-const validate = require('../../middleware/validation');
-const {productSchema} = require('../../schema/product');
+const validate = require('validation');
+const { productSchema } = require('schema');
 
 router.get('/', handler.getAllProduct);
 router.get('/:id', handler.getSingleProduct);
