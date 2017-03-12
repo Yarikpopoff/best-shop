@@ -30,8 +30,8 @@ export default class Admin extends React.Component {
         this.setState({products: ProductsStore.products});
     }
 
-    handleAddProduct(id) {
-        console.log(`add ${id}`);
+    handleAddProduct() {
+        console.log(`add`);
     }
 
     handleEditProduct(id) {
@@ -46,6 +46,11 @@ export default class Admin extends React.Component {
         return (
             <div>
                 <Panel>Admin</Panel>
+                <Panel>
+                    <ButtonToolbar>
+                        <Button onClick={this.handleAddProduct}>Add new product</Button>
+                    </ButtonToolbar>
+                </Panel>
                 <ListGroup>
                 {this.state.products.map((el, i)=>{
                     return (
@@ -61,7 +66,6 @@ export default class Admin extends React.Component {
                                 </Media.Body>
                             </Media>
                             <ButtonToolbar>
-                                <Button onClick={this.handleAddProduct.bind(this, el.id)}>Add</Button>
                                 <Button onClick={this.handleEditProduct.bind(this, el.id)}>Edit</Button>
                                 <Button onClick={this.handleDelProduct.bind(this, el.id)}>Delete</Button>
                             </ButtonToolbar>
