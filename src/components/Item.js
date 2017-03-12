@@ -1,4 +1,5 @@
 import React from 'react';
+import { Panel } from 'react-bootstrap';
 
 export default class Item extends React.Component {
     constructor(props) {
@@ -8,7 +9,7 @@ export default class Item extends React.Component {
     render() {
         return (
             <div>
-                Item
+                <Panel>This is the Item page of our online shop!</Panel>                
             </div>
         )
     }

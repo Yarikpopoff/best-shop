@@ -1,4 +1,5 @@
 import React from 'react';
+import { Panel } from 'react-bootstrap';
 
 export default class Main extends React.Component {
     constructor(props) {
@@ -8,7 +9,7 @@ export default class Main extends React.Component {
     render() {
         return (
             <div>
-                Main
+                <Panel>This is the Main page of our online shop!</Panel>
             </div>
         )
     }
