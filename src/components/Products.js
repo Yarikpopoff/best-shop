@@ -30,10 +30,6 @@ export default class Products extends React.Component {
         this.setState({products: ProductsStore.products});
     }
 
-    handleViewProducts(id) {
-        console.log(`view ${id}`);
-    }
-
     handleAddToCart(id) {
         console.log(`add to cart ${id}`);
     }
@@ -61,7 +57,7 @@ export default class Products extends React.Component {
                                 </Media.Body>
                             </Media>
                             <ButtonToolbar>
-                                <Button onClick={this.handleViewProducts.bind(this, el.id)}>View details</Button>
+                                <Button href={'#/products/view/' + el.id}>View</Button>
                                 <Button onClick={this.handleAddToCart.bind(this, el.id)}>Add to cart</Button>
                                 <Button onClick={this.handleDeleteFromCart.bind(this, el.id)}>Delete from cart</Button>
                             </ButtonToolbar>

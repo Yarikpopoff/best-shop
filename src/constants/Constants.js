@@ -1,6 +1,6 @@
 import keyMirror from 'keymirror';
 
-export default keyMirror({
+module.exports = keyMirror({
     GET_LIST_PRODUCTS: null,
     EVENT_GET_LIST_PRODUCTS: null,
 });

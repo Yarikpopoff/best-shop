@@ -14,9 +14,8 @@ ReactDOM.render(
         <Route path='/' component={App}>
             <IndexRedirect to='/main' />
             <Route path='/main' component={Main} />
-            <Route path='/products' component={Products}>
-                <Route path='/products/item/:id' component={Item} />
-            </Route>
+            <Route path='/products' component={Products} />
+            <Route path='/products/view/:id' component={Item} />
             <Route path='/admin' component={Admin} />
             <Route path='/cart' component={Cart} />
         </Route>
