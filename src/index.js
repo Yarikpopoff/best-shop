@@ -8,6 +8,7 @@ import Products from './components/Products.js';
 import Admin from './components/Admin.js';
 import Cart from './components/Cart.js';
 import Item from './components/Item.js';
+import Add from './components/Add.js';
 
 ReactDOM.render(
     <Router history={hashHistory}>
@@ -17,6 +18,7 @@ ReactDOM.render(
             <Route path='/products' component={Products} />
             <Route path='/products/view/:id' component={Item} />
             <Route path='/admin' component={Admin} />
+            <Route path='/admin/add' component={Add} />
             <Route path='/cart' component={Cart} />
         </Route>
     </Router>, 

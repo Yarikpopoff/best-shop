@@ -48,7 +48,7 @@ export default class Admin extends React.Component {
                 <Panel>Admin</Panel>
                 <Panel>
                     <ButtonToolbar>
-                        <Button onClick={this.handleAddProduct}>Add new product</Button>
+                        <Button href={'#/admin/add'}>Add new product</Button>
                     </ButtonToolbar>
                 </Panel>
                 <ListGroup>

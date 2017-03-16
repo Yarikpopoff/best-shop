@@ -5,7 +5,7 @@ import ProductsStore from '../stores/ProductsStore';
 export default class Item extends React.Component {
     constructor(props) {
         super(props);
-        let [item] = ProductsStore.products.filter((el) => el.id == props.params.id);
+        let [item={}] = ProductsStore.products.filter((el) => el.id == props.params.id);
         this.state = {
             products: item
         }
