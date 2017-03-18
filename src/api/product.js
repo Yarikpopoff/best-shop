@@ -11,12 +11,12 @@ export function getProduct() {
 }
 
 export function createProduct(product) {
-    return axios.post(host+"/api/products/",{ product })
+    return axios.post(host+"/api/products/", product)
         .then(({data})=> data )
 }
 
 export function updateProduct(id, product) {
-    return axios.put(host+"/api/products/"+id, { product })
+    return axios.put(host+"/api/products/"+id, product)
         .then(({data})=> data )
 }
 

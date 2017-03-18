@@ -25,21 +25,16 @@ export default class Admin extends React.Component {
     }
 
     getProductsList = () => {
-        //const temp = ProductsStore.products;        
-        // this.setState({products: temp});
         this.setState({products: ProductsStore.products});
     }
 
-    handleAddProduct() {
-        console.log(`add`);
-    }
-
-    handleEditProduct(id) {
-        console.log(`edit ${id}`);
-    }
-
     handleDelProduct(id) {
-        console.log(`delete ${id}`);
+        let result = confirm(`Удалять запись ${id}?`);
+        if (result) {
+            productAction.deleteProduct(id);
+            productAction.getProduct();
+            this.setState({products: ProductsStore.products});
+        }
     }
 
     render() {
@@ -66,8 +61,8 @@ export default class Admin extends React.Component {
                                 </Media.Body>
                             </Media>
                             <ButtonToolbar>
-                                <Button onClick={this.handleEditProduct.bind(this, el.id)}>Edit</Button>
-                                <Button onClick={this.handleDelProduct.bind(this, el.id)}>Delete</Button>
+                                <Button href={'#/admin/edit/' + el.id}>Edit</Button>
+                                <Button onClick={this.handleDelProduct.bind(this,el.id)}>Delete</Button>
                             </ButtonToolbar>
                         </ListGroupItem>
                     )

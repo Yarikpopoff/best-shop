@@ -13,9 +13,10 @@ export default class Add extends React.Component {
         }       
     }
 
-    handleAddProduct = () => {
-        console.log(this.state);
+    handleAddProduct = (e) => {
+        e.preventDefault();
         productAction.createProduct(this.state);
+        this.props.router.push('/admin'); // переход на admin
     }
 
     handleAddName = (e) => {
@@ -61,7 +62,7 @@ export default class Add extends React.Component {
                     <FormGroup controlId="formFile">
                         <ControlLabel>Img</ControlLabel>
                         <FormControl
-                            type="file"
+                            type="text"
                             value={this.state.img_name}
                             onChange={this.handleAddFile}
                         />
