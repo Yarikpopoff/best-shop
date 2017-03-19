@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel, ListGroup, ListGroupItem, Media, ButtonToolbar, Button } from 'react-bootstrap';
+import { Panel, ListGroup, ListGroupItem, Media, ButtonToolbar, Button, Modal } from 'react-bootstrap';
 
 import ProductsStore from '../stores/ProductsStore';
 import Constants from '../constants/Constants';
@@ -10,6 +10,8 @@ export default class Admin extends React.Component {
         super(props);
         this.state = {
             products: [],
+            showModal: false,
+            productWantToDel: {},
         }
         productAction.getProduct();
     }
@@ -28,13 +30,27 @@ export default class Admin extends React.Component {
         this.setState({products: ProductsStore.products});
     }
 
-    handleDelProduct(id) {
-        let result = confirm(`Удалять запись ${id}?`);
-        if (result) {
-            productAction.deleteProduct(id);
-            productAction.getProduct();
-            this.setState({products: ProductsStore.products});
-        }
+    handleDelProduct(product) {
+        // let result = confirm(`Remove the product ${id}?`);
+        // if (result) {
+        //     productAction.deleteProduct(id);
+        //     this.setState({products: ProductsStore.products});
+        // }
+        this.setState({ showModal: true, productWantToDel: product });
+    }
+
+    closeModal = () => {
+        this.setState({ showModal: false });
+    }
+
+    openModal = () => {
+        this.setState({ showModal: true });
+    }
+
+    confirmDel = () => {
+        productAction.deleteProduct(this.state.productWantToDel.id);
+        this.setState({products: ProductsStore.products});
+        this.setState({ showModal: false });
     }
 
     render() {
@@ -62,12 +78,31 @@ export default class Admin extends React.Component {
                             </Media>
                             <ButtonToolbar>
                                 <Button href={'#/admin/edit/' + el.id}>Edit</Button>
-                                <Button onClick={this.handleDelProduct.bind(this,el.id)}>Delete</Button>
+                                <Button onClick={this.handleDelProduct.bind(this, el)}>Delete</Button>
                             </ButtonToolbar>
                         </ListGroupItem>
                     )
                 })}
                 </ListGroup>
+                
+                <Modal show={this.state.showModal} onHide={this.closeModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Remove the product?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Name: {this.state.productWantToDel.name}</p>
+                        <p>Price: {this.state.productWantToDel.price}</p>
+                        <p>Img_name: {this.state.productWantToDel.img_name}</p>
+                        <p>Description: {this.state.productWantToDel.description}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <ButtonToolbar>
+                            <Button onClick={this.confirmDel}>Ok</Button>
+                            <Button onClick={this.closeModal}>Cancel</Button>
+                        </ButtonToolbar>
+                    </Modal.Footer>
+                </Modal>
+
             </div>
         )
     }

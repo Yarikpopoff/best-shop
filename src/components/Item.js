@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel, Media } from 'react-bootstrap';
+import { Panel, Media, ButtonToolbar, Button } from 'react-bootstrap';
 import ProductsStore from '../stores/ProductsStore';
 
 export default class Item extends React.Component {
@@ -11,12 +11,16 @@ export default class Item extends React.Component {
         }
     }
 
+    handleOk = () => {
+        this.props.router.push('/products')
+    }
+
     render() {
         return (
             <div>
                 <Panel>
                     <div>
-                        <p>This is the Item page of our online shop!</p>
+                        <p>Product preview</p>
                         <p>id: {this.props.params.id}</p>
                     </div>
                     <Media>
@@ -28,6 +32,9 @@ export default class Item extends React.Component {
                             <p>Price: {this.state.products.price}</p>
                             <p>Description: {this.state.products.description}</p>
                         </Media.Body>
+                        <ButtonToolbar>
+                            <Button onClick={this.handleOk}>Ok</Button>
+                        </ButtonToolbar>
                     </Media>
                 </Panel>
             </div>

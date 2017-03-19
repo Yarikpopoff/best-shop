@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Panel, FormGroup, FormControl, ControlLabel, Button, ButtonToolbar } from 'react-bootstrap';
 import * as productAction from '../actions/productAction';
 
 export default class Add extends React.Component {
@@ -17,6 +17,10 @@ export default class Add extends React.Component {
         e.preventDefault();
         productAction.createProduct(this.state);
         this.props.router.push('/admin'); // переход на admin
+    }
+
+    handleAddCancel = () => {
+        this.props.router.push('/admin');
     }
 
     handleAddName = (e) => {
@@ -76,7 +80,10 @@ export default class Add extends React.Component {
                             onChange={this.handleAddDescription}
                         />
                     </FormGroup>
-                    <Button type="submit">Submit</Button>
+                    <ButtonToolbar>
+                        <Button type="submit">Submit</Button>
+                        <Button onClick={this.handleAddCancel}>Canсel</Button>
+                    </ButtonToolbar>
                 </form>
                 </Panel>
             </div>

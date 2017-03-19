@@ -59,7 +59,7 @@ export default class Products extends React.Component {
                             <ButtonToolbar>
                                 <Button href={'#/products/view/' + el.id}>View</Button>
                                 <Button onClick={this.handleAddToCart.bind(this, el.id)}>Add to cart</Button>
-                                <Button onClick={this.handleDeleteFromCart.bind(this, el.id)}>Delete from cart</Button>
+                                <Button onClick={this.handleDeleteFromCart.bind(this, el.id)} disabled={true}>Delete from cart</Button>
                             </ButtonToolbar>
                         </ListGroupItem>
                     )

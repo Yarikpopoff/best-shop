@@ -21,7 +21,9 @@ export default class App extends React.Component {
                     <Nav>
                         <NavItem eventKey={1} href='#/products'>Products list</NavItem>
                         <NavItem eventKey={2} href='#/admin'>Admin</NavItem>
-                        <NavItem eventKey={3} href='#/cart'>Cart</NavItem>
+                        <NavItem eventKey={3} href='#/cart'>
+                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">0</span>
+                        </NavItem>
                     </Nav>
                 </Navbar>
 
