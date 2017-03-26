@@ -11,32 +11,81 @@ export default class Products extends React.Component {
         super(props);
         this.state = {
             products: [],
+            productsInList: [], // add {inCart: false, numberInCart: 0} into each products
+            productsInCartList: [], // [{id: 1, number:1}, {id: 2, number:1}, {id: 2, number:2}, ...]
+            numberInCart: 0,
         }
         productAction.getProduct();
     }
    
-   componentWillMount() {
-       // подписываемся на событие диспатчера
-       ProductsStore.on(Constants.EVENT_GET_LIST_PRODUCTS, this.getProductsList); 
-   }
+    componentWillMount() {
+        // подписываемся на событие диспатчера
+        ProductsStore.on(Constants.EVENT_GET_LIST_PRODUCTS, this.getProductsList); 
+    }
 
     componentWillUnmount() {
+        let temp = this.state.productsInList;
+        temp.forEach((el) => {
+            if (el.inCart == true) {
+                this.state.productsInCartList.push({id: el.id, number: el.numberInCart});
+            }
+        });
+        ProductsStore.productsInCartList = this.state.productsInCartList;
+
         // отписываемся от события
         ProductsStore.removeListener(Constants.EVENT_GET_LIST_PRODUCTS, this.getProductsList); 
     }
 
+    componentWillUpdate() {
+        // console.log('Update');
+    }
+
     getProductsList = () => {
-        //const temp = ProductsStore.products;        
-        // this.setState({products: temp});
-        this.setState({products: ProductsStore.products});
+        let tempArr = ProductsStore.products;
+        let tempCart = ProductsStore.productsInCartList;
+        tempArr.forEach((el) => {
+            el.inCart = false;
+            el.numberInCart = 0;
+            tempCart.forEach((el1) => {
+                if (el.id == el1.id) {
+                    el.inCart = true;
+                    el.numberInCart = el1.number;
+                }
+            })
+        });
+        this.setState({products: ProductsStore.products, productsInList: tempArr});
+    }
+
+    addProductsToCart = () => {
+        this.setState({products: ProductsStore.productsInCartList});
     }
 
     handleAddToCart(id) {
-        console.log(`add to cart ${id}`);
+        let temp = this.state.productsInList;
+        temp.forEach((el) => {
+            if (el.id == id) {
+                el.inCart = true;
+                el.numberInCart += 1;
+                this.setState({productsInList: temp, numberInCart: this.state.numberInCart += 1});
+                ProductsStore.numberProductsInCart = this.state.numberInCart;
+            }
+        });
     }
 
     handleDeleteFromCart(id) {
-        console.log(`delete from cart ${id}`);
+        let temp = this.state.productsInList;
+        temp.forEach((el) => {
+            if (el.id == id) {
+                if (el.numberInCart == 1) {
+                    el.inCart = false;
+                    el.numberInCart -= 1;
+                } else {
+                    el.numberInCart -= 1;
+                }
+                this.setState({productsInList: temp, numberInCart: this.state.numberInCart -= 1});
+                ProductsStore.numberProductsInCart = this.state.numberInCart;
+            }
+        });
     }
 
     render() {
@@ -44,7 +93,7 @@ export default class Products extends React.Component {
             <div>
                 <Panel>Products</Panel>
                 <ListGroup>
-                {this.state.products.map((el, i)=>{
+                {this.state.productsInList.map((el, i)=>{
                     return (
                         <ListGroupItem key={ i }>
                             <Media>
@@ -61,7 +110,8 @@ export default class Products extends React.Component {
                             <ButtonToolbar>
                                 <Button href={'#/products/view/' + el.id}>View</Button>
                                 <Button onClick={this.handleAddToCart.bind(this, el.id)}>Add to cart</Button>
-                                <Button onClick={this.handleDeleteFromCart.bind(this, el.id)} disabled={true}>Delete from cart</Button>
+                                <Button onClick={this.handleDeleteFromCart.bind(this, el.id)} disabled={!el.inCart}>Delete from cart</Button>
+                                <Button href='#/cart'><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">{el.numberInCart}</span></Button>
                             </ButtonToolbar>
                         </ListGroupItem>
                     )
