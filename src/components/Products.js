@@ -12,7 +12,7 @@ export default class Products extends React.Component {
         super(props);
         this.state = {
             products: [],
-            productsInList: [], // add {inCart: false, numberInCart: 0} into each products
+            productsInList: [], // add {numberInCart: 0} into each products
             productsInCartList: [], // [{id: 1, number:1}, {id: 2, number:1}, {id: 2, number:2}, ...]
             numberInCart: 0,
         }        
@@ -30,7 +30,7 @@ export default class Products extends React.Component {
     componentWillUnmount() {
         let temp = this.state.productsInList;
         temp.forEach((el) => {
-            if (el.inCart == true) {
+            if (el.numberInCart > 0) {
                 this.state.productsInCartList.push({id: el.id, number: el.numberInCart});
             }
         });
@@ -48,11 +48,9 @@ export default class Products extends React.Component {
         let tempArr = ProductsStore.products;
         let tempCart = ProductsStore.productsInCartList;
         tempArr.forEach((el) => {
-            el.inCart = false;
             el.numberInCart = 0;
             tempCart.forEach((el1) => {
                 if (el.id == el1.id) {
-                    el.inCart = true;
                     el.numberInCart = el1.number;
                 }
             })
@@ -68,7 +66,6 @@ export default class Products extends React.Component {
         let temp = this.state.productsInList;
         temp.forEach((el) => {
             if (el.id == id) {
-                el.inCart = true;
                 el.numberInCart += 1;
                 this.setState({productsInList: temp, numberInCart: this.state.numberInCart += 1});
             }
@@ -83,12 +80,7 @@ export default class Products extends React.Component {
         let temp = this.state.productsInList;
         temp.forEach((el) => {
             if (el.id == id) {
-                if (el.numberInCart == 1) {
-                    el.inCart = false;
-                    el.numberInCart -= 1;
-                } else {
-                    el.numberInCart -= 1;
-                }
+                el.numberInCart -= 1;
                 this.setState({productsInList: temp, numberInCart: this.state.numberInCart -= 1});
             }
         });
@@ -120,7 +112,7 @@ export default class Products extends React.Component {
                             <ButtonToolbar>
                                 <Button href={'#/products/view/' + el.id}>View</Button>
                                 <Button onClick={this.handleAddToCart.bind(this, el.id)}>Add to cart</Button>
-                                <Button onClick={this.handleDeleteFromCart.bind(this, el.id)} disabled={!el.inCart}>Delete from cart</Button>
+                                <Button onClick={this.handleDeleteFromCart.bind(this, el.id)} disabled={!el.numberInCart}>Delete from cart</Button>
                                 <Button href='#/cart'><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">{el.numberInCart}</span></Button>
                             </ButtonToolbar>
                         </ListGroupItem>
