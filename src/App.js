@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import ProductsStore from './stores/ProductsStore';
 import Constants from './constants/Constants';
-import * as cartAction from './actions/cartAction';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -11,7 +10,6 @@ export default class App extends React.Component {
         this.state = {
             numberProductsInCart: ProductsStore.numberProductsInCart,
         }
-        cartAction.getCart();
     }
 
     componentWillMount() {
@@ -23,7 +21,6 @@ export default class App extends React.Component {
     }
 
     getNumberProductsInCart = () => {
-        console.log(`numberProductsInCart ${ProductsStore.numberProductsInCart}`);
         this.setState({numberProductsInCart: ProductsStore.numberProductsInCart});
     }
 

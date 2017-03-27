@@ -20,9 +20,3 @@ export function putProductToCart(productToCart){
             getProductFromCart();
         })
 }
-export function getCart() {
-    return Dispatcher.dispatch({
-                type: Constants.CHENGE_NUMBER_PRODUCTS_IN_CART,
-                numberProductsInCart: ProductsStore.numberProductsInCart
-        });
-}

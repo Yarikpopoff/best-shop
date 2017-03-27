@@ -2,6 +2,7 @@ import React from 'react';
 import { Panel, ListGroup, ListGroupItem, Media, ButtonToolbar, Button } from 'react-bootstrap';
 
 import ProductsStore from '../stores/ProductsStore';
+import Dispatcher from '../dispatcher/Dispatcher';
 import Constants from '../constants/Constants';
 import * as productAction from '../actions/productAction';
 const host = "http://127.0.0.1:8084";
@@ -14,10 +15,13 @@ export default class Products extends React.Component {
             productsInList: [], // add {inCart: false, numberInCart: 0} into each products
             productsInCartList: [], // [{id: 1, number:1}, {id: 2, number:1}, {id: 2, number:2}, ...]
             numberInCart: 0,
-        }
-        productAction.getProduct();
+        }        
     }
    
+    componentDidMount() {
+        productAction.getProduct();
+    }
+    
     componentWillMount() {
         // подписываемся на событие диспатчера
         ProductsStore.on(Constants.EVENT_GET_LIST_PRODUCTS, this.getProductsList); 
@@ -53,7 +57,7 @@ export default class Products extends React.Component {
                 }
             })
         });
-        this.setState({products: ProductsStore.products, productsInList: tempArr});
+        this.setState({products: ProductsStore.products, productsInList: tempArr, numberInCart: ProductsStore.numberProductsInCart});
     }
 
     addProductsToCart = () => {
@@ -67,8 +71,11 @@ export default class Products extends React.Component {
                 el.inCart = true;
                 el.numberInCart += 1;
                 this.setState({productsInList: temp, numberInCart: this.state.numberInCart += 1});
-                ProductsStore.numberProductsInCart = this.state.numberInCart;
             }
+        });
+        Dispatcher.dispatch({
+            type: Constants.CHENGE_NUMBER_PRODUCTS_IN_CART,
+            numberProductsInCart: this.state.numberInCart
         });
     }
 
@@ -83,8 +90,11 @@ export default class Products extends React.Component {
                     el.numberInCart -= 1;
                 }
                 this.setState({productsInList: temp, numberInCart: this.state.numberInCart -= 1});
-                ProductsStore.numberProductsInCart = this.state.numberInCart;
             }
+        });
+        Dispatcher.dispatch({
+            type: Constants.CHENGE_NUMBER_PRODUCTS_IN_CART,
+            numberProductsInCart: this.state.numberInCart
         });
     }
 
