@@ -11,8 +11,7 @@ export default class Products extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: [],
-            productsInList: [], // add {numberInCart: 0} into each products
+            products: [], // add {numberInCart: 0} into each products
             productsInCartList: [], // [{id: 1, number:1}, {id: 2, number:1}, {id: 2, number:2}, ...]
             numberInCart: 0,
         }        
@@ -28,46 +27,39 @@ export default class Products extends React.Component {
     }
 
     componentWillUnmount() {
-        let temp = this.state.productsInList;
-        temp.forEach((el) => {
+        this.state.products.forEach((el) => {
             if (el.numberInCart > 0) {
                 this.state.productsInCartList.push({id: el.id, number: el.numberInCart});
             }
         });
+        
         ProductsStore.productsInCartList = this.state.productsInCartList;
+        // Dispatcher.dispatch({
+            // type: Constants.SEND_CART_STATUS,
+            // productsInCartList: this.state.productsInCartList
+        // });
 
         // отписываемся от события
         ProductsStore.removeListener(Constants.EVENT_GET_LIST_PRODUCTS, this.getProductsList); 
     }
 
-    componentWillUpdate() {
-        // console.log('Update');
-    }
-
     getProductsList = () => {
-        let tempArr = ProductsStore.products;
-        let tempCart = ProductsStore.productsInCartList;
-        tempArr.forEach((el) => {
+        ProductsStore.products.forEach((el) => {
             el.numberInCart = 0;
-            tempCart.forEach((el1) => {
+            ProductsStore.productsInCartList.forEach((el1) => {
                 if (el.id == el1.id) {
                     el.numberInCart = el1.number;
                 }
             })
         });
-        this.setState({products: ProductsStore.products, productsInList: tempArr, numberInCart: ProductsStore.numberProductsInCart});
-    }
-
-    addProductsToCart = () => {
-        this.setState({products: ProductsStore.productsInCartList});
+        this.setState({products: ProductsStore.products, numberInCart: ProductsStore.numberProductsInCart});
     }
 
     handleAddToCart(id) {
-        let temp = this.state.productsInList;
-        temp.forEach((el) => {
+        this.state.products.forEach((el) => {
             if (el.id == id) {
                 el.numberInCart += 1;
-                this.setState({productsInList: temp, numberInCart: this.state.numberInCart += 1});
+                this.setState({productsInList: this.state.products, numberInCart: this.state.numberInCart += 1});
             }
         });
         Dispatcher.dispatch({
@@ -77,11 +69,10 @@ export default class Products extends React.Component {
     }
 
     handleDeleteFromCart(id) {
-        let temp = this.state.productsInList;
-        temp.forEach((el) => {
+        this.state.products.forEach((el) => {
             if (el.id == id) {
                 el.numberInCart -= 1;
-                this.setState({productsInList: temp, numberInCart: this.state.numberInCart -= 1});
+                this.setState({productsInList: this.state.products, numberInCart: this.state.numberInCart -= 1});
             }
         });
         Dispatcher.dispatch({
@@ -95,7 +86,7 @@ export default class Products extends React.Component {
             <div>
                 <Panel>Products</Panel>
                 <ListGroup>
-                {this.state.productsInList.map((el, i)=>{
+                {this.state.products.map((el, i)=>{
                     return (
                         <ListGroupItem key={ i }>
                             <Media>

@@ -7,17 +7,8 @@ export default class Cart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            productsInCartList: [],
+            productsInCartList: ProductsStore.productsInCartList,
         }
-        cartAction.getProductFromCart();
-    }
-
-    componentWillMount() {
-        this.setState({productsInCartList: ProductsStore.productsInCartList});
-    }
-
-    componentWillUnmount() {
-        ProductsStore.productsInCartList = this.state.productsInCartList;
     }
 
     render() {
