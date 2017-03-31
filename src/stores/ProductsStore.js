@@ -19,10 +19,10 @@ class ProductsStore extends EventEmitter {
                     this.numberProductsInCart = action.numberProductsInCart;
                     this.emit(Constants.EVENT_CHENGE_NUMBER_PRODUCTS_IN_CART);
                     break;
-                case Constants.SEND_CART_STATUS:
-                    this.productsInCartList = action.productsInCartList;
-                    this.emit(Constants.EVENP_SEND_CART_STATUS);
-                    break;
+                // case Constants.SEND_CART_STATUS:
+                    // this.productsInCartList = action.productsInCartList;
+                    // this.emit(Constants.EVENP_SEND_CART_STATUS);
+                    // break;
             }
         })
     }
