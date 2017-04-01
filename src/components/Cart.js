@@ -12,13 +12,17 @@ export default class Cart extends React.Component {
         }
     }
 
+    handlePostCart = () => {
+        console.log('Post Cart!');
+    }
+
     render() {
         return (
             <div>
                 <Panel>
                     <p>This is the Cart page of our online shop!</p>
                     <ButtonToolbar>
-                        <Button>Сonfirm the purchase</Button>
+                        <Button onClick={this.handlePostCart}>Сonfirm the order</Button>
                     </ButtonToolbar>
                 </Panel>
                 <ListGroup>
