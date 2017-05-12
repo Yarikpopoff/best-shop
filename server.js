@@ -6,6 +6,7 @@ const {log, error} = require('./server/node_modules/debugger')('server');
 
 const config = require('./server/conf');
 const migration = require('./server/db/migration');
+const value = 10;
 
 migration.db_upgrade(config.get("db-env"));
 
