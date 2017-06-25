@@ -1,5 +1,8 @@
-const db = require('utils').getDB();
 const knex = require('utils').getKnex();
+const Promise = require('bluebird');
+const db = require('utils').getDB();
+const fs = Promise.promisifyAll(require('fs'));
+
 const {log, error} = require('debugger')("products");
 
 function getProducts() {
@@ -22,15 +25,28 @@ function getProductsById(id) {
         });
 }
 
-function createProducts(body) {
+function* createProducts(body) {
+
+    log(`[createProducts] body `, body);
+    const blob  = body.file;
+    const filename  = body.filename;
+    log(`[createProducts] boblobdy `, blob);
+    if (body.file){
+        delete body.file;
+    }
+    if (body.filename){
+        delete body.filename;
+    }
+    if (body.filetype){
+        delete body.filetype;
+    }
     const builder = knex('product').insert(body);
     const {sql, bindings} = builder.toSQL();
     log(`[createProducts][sql] ${sql} [${bindings}]`);
-    return db.run(sql, bindings)
-        .then((values) => {
-            const id = values.stmt.lastID;
-            return getProductsById(id);
-        });
+    const values = yield db.run(sql, bindings);
+    //yield mkdirp.mkdirpAsync(data);
+    yield fs.writeFileAsync(`d:/qwe/${filename}`, blob, 'binary');
+    return 1
 }
 
 function editProduct(id, body) {

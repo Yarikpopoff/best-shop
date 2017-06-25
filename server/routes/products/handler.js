@@ -1,7 +1,9 @@
 const api = require('./index');
+const Promise = require('bluebird');
+const co = Promise.coroutine;
 
 function createProduct(req, res, next) {
-    api.createProducts(req.data)
+    co(api.createProducts)(req.data)
         .then(rows => {
             res.json({data: rows});
         })

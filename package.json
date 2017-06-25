@@ -13,12 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.15.3",
-    "bluebird": "^3.4.7",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
     "bootstrap": "^3.3.7",
     "cors": "^2.8.1",
     "db-migrate-sqlite3": "^0.2.1",
-    "events": "^1.1.1",
     "debug": "^2.6.1",
     "express": "^4.14.1",
     "flux": "^3.1.2",
