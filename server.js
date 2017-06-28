@@ -26,7 +26,7 @@ app.options('*', cors({
 // routes
 app.use('/', express.static('public'));
 app.get('/image/products/:name', function(req,res,next){
-    const name = "100.png";//req.param.name;
+    const name = req.params.name;
     const imagePath = path.join(config.get("image-path"), name);
     log(`imagePath  ${imagePath}`);
     res.sendFile(imagePath);

@@ -4,6 +4,7 @@ import { Panel, ListGroup, ListGroupItem, Media, ButtonToolbar, Button, Modal } 
 import ProductsStore from '../stores/ProductsStore';
 import Constants from '../constants/Constants';
 import * as productAction from '../actions/productAction';
+const host = "http://127.0.0.1:8084";
 
 export default class Admin extends React.Component {
     constructor(props) {
@@ -68,7 +69,8 @@ export default class Admin extends React.Component {
                         <ListGroupItem key={ i }>
                             <Media>
                                 <Media.Left>
-                                    <img width={64} height={64} src="" alt={el.img_name}/>
+                                    <img width={64} height={64} alt={el.img_name}
+                                         src={host+"/image/products/"+el.img_name} />
                                 </Media.Left>
                                 <Media.Body>
                                     <Media.Heading>Name: {el.name}</Media.Heading>
