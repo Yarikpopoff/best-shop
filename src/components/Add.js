@@ -11,7 +11,6 @@ export default class Add extends React.Component {
             img_name:"", 
             description :"",
             file: undefined,
-            filename: undefined,
             filetype: undefined,
         }
     }
@@ -45,7 +44,7 @@ export default class Add extends React.Component {
             const stringB64 = reader.result.substring(22);
             this.setState({
                 file: stringB64,
-                filename: file.name,
+                img_name: file.name,
                 filetype: reader.result.substring(0,22)
             }, ()=>{console.log(`end`)});
         };
