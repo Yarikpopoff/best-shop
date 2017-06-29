@@ -1,5 +1,6 @@
 {
   "port": 8084,
   "dev-webpack-server": "http://0.0.0.0:8083",
-  "db-env": "dev"
+  "db-env": "dev",
+  "image-path":"d:/best-shop/images/products/"
 }

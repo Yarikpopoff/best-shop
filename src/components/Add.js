@@ -9,8 +9,10 @@ export default class Add extends React.Component {
             name: "",
             price: "", 
             img_name:"", 
-            description :""
-        }       
+            description :"",
+            file: undefined,
+            filetype: undefined,
+        }
     }
 
     handleAddProduct = (e) => {
@@ -32,7 +34,24 @@ export default class Add extends React.Component {
     }
 
     handleAddFile = (e) => {
-        this.setState({ img_name: e.target.value });
+        const reader = new FileReader();
+        const file = e.target.files[0];
+
+        reader.onloadend = (upload) => {
+            console.log(reader.result);
+            console.log(reader.result.substring(0,22));
+            console.log(reader.result.substring(22));
+            const stringB64 = reader.result.substring(22);
+            this.setState({
+                file: stringB64,
+                img_name: file.name,
+                filetype: reader.result.substring(0,22)
+            }, ()=>{console.log(`end`)});
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     }
 
     handleAddDescription = (e) => {
@@ -66,8 +85,7 @@ export default class Add extends React.Component {
                     <FormGroup controlId="formFile">
                         <ControlLabel>Img</ControlLabel>
                         <FormControl
-                            type="text"
-                            value={this.state.img_name}
+                            type="file"
                             onChange={this.handleAddFile}
                         />
                     </FormGroup>
