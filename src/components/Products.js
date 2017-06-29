@@ -94,15 +94,7 @@ export default class Products extends React.Component {
                 </Panel>
                 <ListGroup>
                 {this.state.products
-                    .filter(el => {
-                        if (this.state.inCart && el.numberInCart > 0) {
-                            return true;
-                        } else {
-                            if (!this.state.inCart) {
-                                return true;
-                            }
-                        }
-                    })
+                    .filter(el => !this.state.inCart || el.numberInCart > 0)
                     .map((el, i)=>{
                         return (
                             <ListGroupItem key={ i }>

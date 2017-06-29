@@ -6,5 +6,7 @@ module.exports = keyMirror({
     CHENGE_NUMBER_PRODUCTS_IN_CART: null,
     EVENT_CHENGE_NUMBER_PRODUCTS_IN_CART: null,
     // SEND_CART_STATUS: null,
-    // EVENP_SEND_CART_STATUS: null,    
+    // EVENP_SEND_CART_STATUS: null,
+    GET_PRODUCTS_FROM_CART: null,
+    EVENT_GET_PRODUCTS_FROM_CART: null, 
 });

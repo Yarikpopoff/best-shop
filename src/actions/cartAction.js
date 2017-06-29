@@ -14,8 +14,8 @@ export function getProductFromCart(){
         })
         .catch(e=>{console.log(e)})
 }
-export function putProductToCart(productToCart){
-    return api.putProductToCart(productToCart)
+export function postProductToCart(productToCart){
+    return api.postProductToCart(productToCart)
         .then(productToCart=>{
             getProductFromCart();
         })

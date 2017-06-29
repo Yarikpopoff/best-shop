@@ -57,9 +57,10 @@ function createCart(body) {
     let builder = knex('cart').insert(body);
     let {sql, bindings} = builder.toSQL();
     log(`[createCart][sql] ${sql} [${bindings}]`);
+    let id;
     return db.run(sql, bindings)
         .then((values) => {
-            const id = values.stmt.lastID;
+            id = values.stmt.lastID;
             const cart_products = items.map(x => {
                 return {cart_id: id, product_id: x}
             });

@@ -15,7 +15,7 @@ body:
 ```json
 {
     "name":"qw",
-    "product_list":[1, 2, 3]
+    "product_list":[{id:1, number: 3}, {id:2, number: 4}, {id:3, number: 2}],
 }
 ```
 
@@ -24,19 +24,7 @@ response:
 {
     "id": 1,
     "name": "description",
-    "product_list": [{
-        "id":1,
-        "name":"asd", 
-        "price":111, 
-        "img_name":"img", 
-        "description":"descA"
-    }, {
-        "id":2,
-        "name":"asdasd", 
-        "price":222, 
-        "img_name":"img", 
-        "description":"descB"
-    }]
+    "product_list":[{id:1, number: 3}, {id:2, number: 4}, {id:3, number: 2}],
 }
 ```
 
@@ -46,21 +34,15 @@ GET api/carts
 {
     "data":[
        {
+          "id": 1,
           "name": "description",
-          "product_list": [{
-              "id":1,
-              "name":"asd", 
-              "price":111, 
-              "img_name":"img", 
-              "description":"desc"
-          },{
-              "id":1,
-              "name":"asd", 
-              "price":222, 
-              "img_name":"img", 
-              "description":"desc"
-          }]
-       }
+          "product_list":[{id:1, number: 3}, {id:2, number: 4}, {id:3, number: 2}],
+       },
+              {
+          "id": 2,
+          "name": "description1",
+          "product_list":[{id:1, number: 3}, {id:2, number: 4}, {id:3, number: 2}],
+       },
     ]
 }
 ```

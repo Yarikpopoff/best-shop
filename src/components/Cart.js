@@ -2,18 +2,33 @@ import React from 'react';
 import { Panel, ListGroup, ListGroupItem, Media, ButtonToolbar, Button } from 'react-bootstrap';
 import * as cartAction from '../actions/cartAction';
 import ProductsStore from '../stores/ProductsStore';
+import Constants from '../constants/Constants';
 
 export default class Cart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            products:ProductsStore.products,
+            products: ProductsStore.products,
             productsInCartList: ProductsStore.productsInCartList,
         }
     }
 
+    componentWillMount() {
+        ProductsStore.on(Constants.EVENT_GET_PRODUCTS_FROM_CART, this.getProductsInCarts); 
+    }
+
+    componentWillUnmount() {
+        ProductsStore.removeListener(Constants.EVENT_GET_PRODUCTS_FROM_CART, this.getProductsInCarts); 
+    }
+
+    getProductsInCarts = () => {
+        console.log(ProductsStore.productsInCart);
+    }
+
+
     handlePostCart = () => {
         console.log('Post Cart!');
+        cartAction.postProductToCart({"name":"qw", "product_list":[1, 2, 3]});
     }
 
     render() {

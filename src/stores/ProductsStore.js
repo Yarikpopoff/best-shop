@@ -9,6 +9,7 @@ class ProductsStore extends EventEmitter {
         this.products = []; // промежуточное хранение списка продуктов
         this.productsInCartList = []; // промежуточное хранение списка продуктов в корзине
         this.numberProductsInCart = 0; // количество продуктов в корзине
+        this.productsInCart = [];
         Dispatcher.register( action => {
             switch (action.type) {
                 case Constants.GET_LIST_PRODUCTS:
@@ -23,6 +24,10 @@ class ProductsStore extends EventEmitter {
                     // this.productsInCartList = action.productsInCartList;
                     // this.emit(Constants.EVENP_SEND_CART_STATUS);
                     // break;
+                case Constants.GET_PRODUCTS_FROM_CART:
+                    this.productsInCart = action.productsInCart;
+                    this.emit(Constants.EVENT_GET_PRODUCTS_FROM_CART);
+                    break;
             }
         })
     }

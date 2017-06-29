@@ -10,7 +10,7 @@ export function getProductFromCart() {
         })
 }
 
-export function putProductToCart(productToCart) {
+export function postProductToCart(productToCart) {
     return axios.post(host+"/api/carts/", productToCart)
         .then(({data})=> data )
 }
