@@ -5,6 +5,8 @@ import ProductsStore from '../stores/ProductsStore';
 import Constants from '../constants/Constants';
 import * as productAction from '../actions/productAction';
 import {load} from '../utils';
+import {axiosSetDefault} from '../utils';
+
 const host = load("HOST-KEY");
 
 export default class Products extends React.Component {
@@ -12,7 +14,8 @@ export default class Products extends React.Component {
         super(props);
         this.state = {
             products: [],
-        }
+        };
+        axiosSetDefault();
         productAction.getProduct();
     }
    

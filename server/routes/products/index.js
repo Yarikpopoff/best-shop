@@ -7,15 +7,19 @@ const config = require('../../conf');
 const {log, error} = require('debugger')("products");
 
 function* getProducts() {
-    const {sql, bindings} = mohair.table('product').toSQL();
-    log(`[getProducts][sql] ${sql} [${bindings}]`);
+    const query = mohair.table('product').select();
+    const sql  = query.sql();
+    const params = query.params();
+    log(`[getProducts][sql] ${sql} [${params}]`);
     return yield db.all(sql);
 }
 
 function* getProductsById(id) {
-    const {sql, bindings} = mohair.table('product').where({'id':id}).toSQL();
-    log(`[getProductsById][sql] ${sql} [${bindings}]`);
-    return yield db.all(sql, bindings).get(0);
+    const query = mohair.table('product').where({'id':id});
+    const sql  = query.sql();
+    const params = query.params();
+    log(`[getProductsById][sql] ${sql} [${params}]`);
+    return yield db.all(sql, params).get(0);
 }
 
 function _createProductCreate(body) {
@@ -37,26 +41,32 @@ function _createProductCreate(body) {
 function* createProducts(data) {
     log(`[createProducts] body `, data);
     const {body, blob, filename} = _createProductCreate(data);
-    const  {sql, bindings} = mohair.table('product').insert(body).toSQL();
-    log(`[createProducts][sql] ${sql} [${bindings}]`);
-    yield db.run(sql, bindings);
+    const  query = mohair.table('product').insert(body);
+    const sql  = query.sql();
+    const params = query.params();
+    log(`[createProducts][sql] ${sql} [${params}]`);
+    yield db.run(sql, params);
     yield fs.writeFileAsync(`${config.get("image-path")}${data.img_name}`, blob, 'binary');
     // return yield getProductsById()
 }
 
 function* editProduct(id, body) {
-    const {sql, bindings} = mohair.table('product').update(body).where({'id': id}).toSQL();
-    log(`[getProductsById][sql] ${sql} [${bindings}]`);
-    yield db.run(sql, bindings);
+    const query = mohair.table('product').update(body).where({'id': id});
+    const sql  = query.sql();
+    const params = query.params();
+    log(`[getProductsById][sql] ${sql} [${params}]`);
+    yield db.run(sql, params);
     return yield* getProductsById(id);
 }
 
 function* deleteProduct(id) {
     const product = yield* getProductsById(id);
     if (product) {
-        const {sql, bindings} = mohair.table('product').where({'id': id}).delete().toSQL();
-        log(`[deleteProduct][sql] ${sql} [${bindings}]`);
-        yield db.run(sql, bindings);
+        const query = mohair.table('product').where({'id': id}).delete();
+        const sql  = query.sql();
+        const params = query.params();
+        log(`[deleteProduct][sql] ${sql} [${params}]`);
+        yield db.run(sql, params);
         yield fs.unlinkAsync(`${config.get("image-path")}${product.img_name}`);
     }
     return 200;

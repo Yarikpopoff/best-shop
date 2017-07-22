@@ -5,26 +5,29 @@ const Promise = require('bluebird');
 
 function getCarts() {
     const builderCart = mohair.table('cart').select();
-    const {sql: sqlCart, bindings: bindingsCart} = builderCart.toSQL();
-    log(`[cart][sql] ${sqlCart} [${bindingsCart}]`);
+    const builderCartSql  = builderCart.sql();
+    const builderCartParams = builderCart.params();
+    log(`[cart][sql] ${builderCartSql} [${builderCartParams}]`);
 
     const builderCartProduct = mohair.table('cart_product').select();
-    const {sql: sqlCartProduct, bindings: bindingsCartProduct} = builderCartProduct.toSQL();
-    log(`[cart_product][sql] ${sqlCartProduct} [${bindingsCartProduct}]`);
+    const builderCartProductSql  = builderCartProduct.sql();
+    const builderCartProductParams = builderCartProduct.params();
+    log(`[cart_product][sql] ${builderCartProductSql} [${builderCartProductParams}]`);
 
     const builderProduct = mohair.table('product').select();
-    const {sql: sqlProduct, bindings: bindingsProduct} = builderProduct.toSQL();
-    log(`[product][sql] ${sqlProduct} [${bindingsProduct}]`);
+    const builderProductSql  = builderProduct.sql();
+    const builderProductParams = builderProduct.params();
+    log(`[product][sql] ${builderProductSql} [${builderProductParams}]`);
 
     return Promise.join(
-        db.all(sqlCart, bindingsCart),
-        db.all(sqlCartProduct, bindingsCartProduct),
-        db.all(sqlProduct, bindingsProduct)
+        db.all(builderCartSql, builderCartParams),
+        db.all(builderCartProductSql, builderCartProductParams),
+        db.all(builderProductSql, builderProductParams)
     )
         .then(([ carts, cartProducts, products]) => {
             const resultCarts = carts.map(cart => {
-                const productIds = cartProducts.filter(y => y.cart_id == cart.id).map(z => z.product_id);
-                cart.product_list = products.filter(x => productIds.some(y => y == x.id));
+                const productIds = cartProducts.filter(y => y.cart_id === cart.id).map(z => z.product_id);
+                cart.product_list = products.filter(x => productIds.some(y => y === x.id));
                 return cart;
             });
             return resultCarts;
@@ -33,9 +36,10 @@ function getCarts() {
 }
 
 function getCartById(id) {
-    let builder = mohair.table('cart').select().where('id', id);
-    let {sql, bindings} = builder.toSQL();
-    log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
+    let builder = mohair.table('cart').select().where({'id': id});
+    const sql  = builder.sql();
+    const params = builder.params();
+    log(`[cart_product][sql] ${sql} [${params}]`);
     return Promise.join(
         db.all(sql, bindings),
         findProductByCartId(id)
@@ -55,9 +59,10 @@ function createCart(body) {
     const items = body.product_list;
     delete body.product_list;
     let builder = mohair.table('cart').insert(body);
-    let {sql, bindings} = builder.toSQL();
-    log(`[createCart][sql] ${sql} [${bindings}]`);
-    return db.run(sql, bindings)
+    const sql  = builder.sql();
+    const params = builder.params();
+    log(`[createCart][sql] ${sql} [${params}]`);
+    return db.run(sql, params)
         .then((values) => {
             const id = values.stmt.lastID;
             const cart_products = items.map(x => {
@@ -75,10 +80,11 @@ function createCart(body) {
 // todo
 function editCart(id, body) {
     return Promise.resolve(`todo`);
-    const builder = mohair.table('cart').update(body).where('id', id);
-    const {sql, bindings} = builder.toSQL();
-    log(`[editCart][sql] ${sql} [${bindings}]`);
-    return db.run(sql, bindings)
+    const builder = mohair.table('cart').update(body).where({'id': id});
+    const sql  = builder.sql();
+    const params = builder.params();
+    log(`[editCart][sql] ${sql} [${params}]`);
+    return db.run(sql, params)
         .then(() => {
             return getCartById(id);
         });
@@ -87,29 +93,32 @@ function editCart(id, body) {
 function deleteCart(id) {
     log(`[deleteProduct][sql] ${id}`);
     const builderCart = mohair.table('cart').delete().where({'id': id});
-    const {sql: sqlCart, bindings: bindingsCart} = builderCart.toSQL();
-    log(`[deleteProduct][sql] ${sqlCart} [${bindingsCart}]`);
+    const builderCartSql  = builderCart.sql();
+    const builderCartParams = builderCart.params();
+    log(`[deleteProduct][sql] ${builderCartSql} [${builderCartParams}]`);
 
     const builderCartProduct = mohair.table('cart_product').where('cart_id', id).delete();
-    const {sql: sqlCartProduct, bindings: bindingsCartProduct} = builderCartProduct.toSQL();
-    log(`[deleteProduct][sql] ${sqlCartProduct} [${bindingsCartProduct}]`);
+    const builderCartProductSql  = builderCartProduct.sql();
+    const builderCartProductParams = builderCartProduct.params();
+    log(`[deleteProduct][sql] ${builderCartProductSql} [${builderCartProductParams}]`);
 
     return Promise.join(
-        db.run(sqlCart, bindingsCart),
-        db.run(sqlCartProduct, bindingsCartProduct)
+        db.run(builderCartSql, builderCartParams),
+        db.run(builderCartProductSql, builderCartProductParams)
     )
 }
 
 function findProductByCartId(id) {
     let builder = mohair.table('cart_product').select().where({'cart_id': id}); //.whereIn('id', [1, 2, 3]);
-    let {sql, bindings} = builder.toSQL();
-    log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
-    return db.all(sql, bindings)
+    const sql  = builder.sql();
+    const params = builder.params();
+    log(`[getCartById][cart][sql] ${sql} [${params}]`);
+    return db.all(sql, params)
         .then((products_ids) => {
             let builder = mohair.table('product').whereIn('id', products_ids.map(x => x.product_id));
-            let {sql, bindings} = builder.toSQL();
-            log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
-            return db.all(sql, bindings);
+            const sql  = builder.sql();
+            const params = builder.params();
+            return db.all(sql, params);
         })
 }
 
