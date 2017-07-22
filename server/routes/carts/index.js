@@ -1,18 +1,18 @@
 const db = require('utils').getDB();
-const knex = require('utils').getKnex();
+const mohair = require('mohair');
 const {log, error} = require('debugger')("cart");
 const Promise = require('bluebird');
 
 function getCarts() {
-    const builderCart = knex.select().from('cart');
+    const builderCart = mohair.table('cart').select();
     const {sql: sqlCart, bindings: bindingsCart} = builderCart.toSQL();
     log(`[cart][sql] ${sqlCart} [${bindingsCart}]`);
 
-    const builderCartProduct = knex.select().from('cart_product');
+    const builderCartProduct = mohair.table('cart_product').select();
     const {sql: sqlCartProduct, bindings: bindingsCartProduct} = builderCartProduct.toSQL();
     log(`[cart_product][sql] ${sqlCartProduct} [${bindingsCartProduct}]`);
 
-    const builderProduct = knex.select().from('product');
+    const builderProduct = mohair.table('product').select();
     const {sql: sqlProduct, bindings: bindingsProduct} = builderProduct.toSQL();
     log(`[product][sql] ${sqlProduct} [${bindingsProduct}]`);
 
@@ -33,7 +33,7 @@ function getCarts() {
 }
 
 function getCartById(id) {
-    let builder = knex.select().from('cart').where('id', id);
+    let builder = mohair.table('cart').select().where('id', id);
     let {sql, bindings} = builder.toSQL();
     log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
     return Promise.join(
@@ -54,7 +54,7 @@ function getCartById(id) {
 function createCart(body) {
     const items = body.product_list;
     delete body.product_list;
-    let builder = knex('cart').insert(body);
+    let builder = mohair.table('cart').insert(body);
     let {sql, bindings} = builder.toSQL();
     log(`[createCart][sql] ${sql} [${bindings}]`);
     return db.run(sql, bindings)
@@ -63,7 +63,7 @@ function createCart(body) {
             const cart_products = items.map(x => {
                 return {cart_id: id, product_id: x}
             });
-            let builder = knex('cart_product').insert(cart_products);
+            let builder = mohair.table('cart_product').insert(cart_products);
             let {sql, bindings} = builder.toSQL();
             return db.run(sql, bindings)
         })
@@ -75,7 +75,7 @@ function createCart(body) {
 // todo
 function editCart(id, body) {
     return Promise.resolve(`todo`);
-    const builder = knex('cart').update(body).where('id', id);
+    const builder = mohair.table('cart').update(body).where('id', id);
     const {sql, bindings} = builder.toSQL();
     log(`[editCart][sql] ${sql} [${bindings}]`);
     return db.run(sql, bindings)
@@ -86,11 +86,11 @@ function editCart(id, body) {
 
 function deleteCart(id) {
     log(`[deleteProduct][sql] ${id}`);
-    const builderCart = knex('cart').delete().where('id', id);
+    const builderCart = mohair.table('cart').delete().where({'id': id});
     const {sql: sqlCart, bindings: bindingsCart} = builderCart.toSQL();
     log(`[deleteProduct][sql] ${sqlCart} [${bindingsCart}]`);
 
-    const builderCartProduct = knex('cart_product').delete().where('cart_id', id);
+    const builderCartProduct = mohair.table('cart_product').where('cart_id', id).delete();
     const {sql: sqlCartProduct, bindings: bindingsCartProduct} = builderCartProduct.toSQL();
     log(`[deleteProduct][sql] ${sqlCartProduct} [${bindingsCartProduct}]`);
 
@@ -101,12 +101,12 @@ function deleteCart(id) {
 }
 
 function findProductByCartId(id) {
-    let builder = knex.select().from('cart_product').where('cart_id', id); //.whereIn('id', [1, 2, 3]);
+    let builder = mohair.table('cart_product').select().where({'cart_id': id}); //.whereIn('id', [1, 2, 3]);
     let {sql, bindings} = builder.toSQL();
     log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
     return db.all(sql, bindings)
         .then((products_ids) => {
-            let builder = knex.select().from('product').whereIn('id', products_ids.map(x => x.product_id));
+            let builder = mohair.table('product').whereIn('id', products_ids.map(x => x.product_id));
             let {sql, bindings} = builder.toSQL();
             log(`[getCartById][cart][sql] ${sql} [${bindings}]`);
             return db.all(sql, bindings);
