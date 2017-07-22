@@ -1,6 +1,6 @@
 const axios = require('axios');
 const host = "http://127.0.0.1:8084";
-const blueBird = require('blueBird');
+const blueBird = require('bluebird');
 
 export function getProduct() {
     // return blueBird.Promise.resolve([{id:3}]);
