@@ -72,7 +72,7 @@ export default class Admin extends React.Component {
                                 <Media>
                                     <Media.Left>
                                         <img width={64} height={64} alt={el.img_name}
-                                             src={host + "/image/products/" + el.img_name}/>
+                                             src={"http://" + host + "/image/products/" + el.img_name}/>
                                     </Media.Left>
                                     <Media.Body>
                                         <Media.Heading>Name: {el.name}</Media.Heading>
