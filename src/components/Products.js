@@ -4,7 +4,8 @@ import { Panel, ListGroup, ListGroupItem, Media, ButtonToolbar, Button } from 'r
 import ProductsStore from '../stores/ProductsStore';
 import Constants from '../constants/Constants';
 import * as productAction from '../actions/productAction';
-const host = "http://127.0.0.1:8084";
+import {load} from '../utils';
+const host = load("HOST-KEY");
 
 export default class Products extends React.Component {
     constructor(props) {
